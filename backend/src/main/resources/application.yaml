@@ -1,0 +1,56 @@
+server:
+  port: ${SERVER_PORT:8088}
+
+spring:
+  # 允许覆盖 Bean
+  main:
+    allow-bean-definition-overriding: true
+  # 数据库配置（生产环境请通过环境变量覆盖）
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/student_management_system?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # Redis 配置
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    # password: ${REDIS_PASSWORD:} # 如果 Redis 设置了密码，取消注释并配置
+    database: ${REDIS_DATABASE:0}
+  # 文件上传大小限制
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+
+file:
+  # 头像在服务器上的存储目录（相对路径基于启动目录）
+  upload-dir: ${FILE_UPLOAD_DIR:./uploads}
+  # 对外暴露的访问路径
+  access-path: /avatars/
+
+shiro:
+  # 禁用 Shiro 自动配置
+  enabled: false
+
+mybatis-plus:
+  # Mapper XML file location
+  mapper-locations: classpath:/mapper/*.xml
+  # 实体类别名扫描路径
+  type-aliases-package: cn.lvb.education.entity
+  configuration:
+    # 开启驼峰命名自动转换
+    map-underscore-to-camel-case: true
+
+# 自定义 JWT 配置（生产环境务必通过 JWT_SECRET 覆盖）
+jwt:
+  secret: ${JWT_SECRET:dev-only-secret-please-change-me-0123456789abcdef}
+  expire: ${JWT_EXPIRE:86400} # Token 有效期（秒），默认 24 小时
+  header: "Authorization" # HTTP 请求头中携带 Token 的字段名
+
+# 日志配置
+logging:
+  level:
+    cn.lvb.education: ${LOG_LEVEL:info}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
